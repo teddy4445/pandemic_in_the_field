@@ -1,5 +1,6 @@
 # library imports
 import math
+import itertools
 from random import random
 
 # project imports
@@ -15,12 +16,18 @@ class Population:
         self.agents = agents
 
     @staticmethod
-    def initialize_grid(d_x: float,
+    def initialize_grid(width: float,
+                        height: float,
+                        d_x: float,
                         d_y: float,
                         infected_portion: float):
-        pass
-        # TODO: finish later
-
+        answer = [[Agent(x=x_val,
+                         y=y_val,
+                         state=EpiState.S if random() > infected_portion else EpiState.I,
+                         clock=0)
+                   for y_val in range(math.floor(height / d_y))]
+                  for x_val in range(math.floor(width / d_x))]
+        return Population(agents=list(itertools.chain.from_iterable(answer)))
 
     def tick(self):
         for agent in self.agents:
@@ -38,15 +45,16 @@ class Population:
     def calc_beta(i_agent: Agent,
                   j_agent: Agent):
         try:
-            return float(EpiParm.basic_beta) / math.sqrt(math.pow(i_agent.x - j_agent.x, 2) + math.pow(i_agent.y - j_agent.y, 2))
+            return float(EpiParm.basic_beta) / math.sqrt(
+                math.pow(i_agent.x - j_agent.x, 2) + math.pow(i_agent.y - j_agent.y, 2))
         except:
             return 0
 
     def update_spontaneous_epi_state(self):
         for agent in self.agents:
-            if agent.state == EpiState.E and agent.clock >= EpiParm.e_to_i:
+            if agent.state == EpiState.E and agent.clock >= int(EpiParm.e_to_i):
                 agent.infect()
-            elif agent.state == EpiState.I and agent.clock >= EpiParm.i_to_r_d:
+            elif agent.state == EpiState.I and agent.clock >= int(EpiParm.i_to_r_d):
                 if random() < float(EpiParm.recovery_rate):
                     agent.recover()
                 else:
@@ -66,4 +74,3 @@ class Population:
     def finish_pandemic(self):
         answer = self.epi_distribution()
         return (answer[EpiState.E] + answer[EpiState.I]) > 0
-

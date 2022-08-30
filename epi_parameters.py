@@ -1,8 +1,6 @@
-from enum import Enum
+class EpiParm:
 
-
-class EpiParm(Enum):
-    basic_beta = 5
+    basic_beta = 0.014
     e_to_i = 3
-    i_to_r_d = 7
-    recovery_rate = 0.8
+    i_to_r_d = 14
+    recovery_rate = 0.5
