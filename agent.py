@@ -19,15 +19,15 @@ class Agent:
     def tick(self):
         self.clock += 1
 
-    def expose(self):
-        self.state = EpiState.E
-
     def infect(self):
         self.state = EpiState.I
 
-    def recover(self):
+    def removed(self):
         self.state = EpiState.R
 
-    def dead(self):
-        self.state = EpiState.D
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "{} (c={})".format(self.state, self.clock)
 

@@ -23,7 +23,7 @@ class Main:
                                                               width=100,
                                                               d_x=25,
                                                               d_y=5,
-                                                              infected_portion=0.05),
+                                                              infected_count=3),
                         economy=Economy())
         sim.run(duration=100)
         Plotter.plot_sim_economy(sim=sim,
